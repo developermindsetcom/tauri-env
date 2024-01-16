@@ -1,5 +1,7 @@
 # Tauri + Svelte + Typescript + Environment Variables
 
+![demo](./docs/demo.png)
+
 ```shell
 .env                # loaded in all cases
 .env.local          # loaded in all cases, ignored by git

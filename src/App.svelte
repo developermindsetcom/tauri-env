@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Greet from './lib/Greet.svelte'
+  import GetEnv from './lib/GetEnv.svelte'
 </script>
 
 <main class="container">
@@ -22,7 +22,7 @@
   </p>
 
   <div class="row">
-    <Greet />
+    <GetEnv />
   </div>
 
 

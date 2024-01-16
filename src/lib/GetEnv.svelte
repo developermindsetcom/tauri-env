@@ -21,17 +21,32 @@
     return ""
   }
 
+  const getPrivateSvelteKit = async (name:string) => {
+		const response = await fetch('/api/getEnv', {
+			method: 'POST',
+			body: JSON.stringify({ name }),
+			headers: {
+				'content-type': 'application/json',
+			},
+		});
+	
+		const {variable} = await response.json();
+    return variable
+  }
+
   async function getEnv(){
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
     let fromRust = await invoke("get_env", { name })
     let fromVite = import.meta.env[name]
     let fromShell = await getEnvShell(name);
     let fromSvelte = (env as any)[name]
+    let fromPrivateSvelte = await getPrivateSvelteKit(name);
 
     response = `from rust: "${fromRust}"\n`;
     response += `from vite: "${fromVite}"\n`;
     response += `from shell: "${fromShell}"\n`;
-    response += `from svelte: "${fromSvelte}"\n`;
+    response += `from sveltekit: "${fromSvelte}"\n`;
+    response += `from private sveltekit: "${fromPrivateSvelte}"\n`;
     response += `\n`;
   }
 </script>

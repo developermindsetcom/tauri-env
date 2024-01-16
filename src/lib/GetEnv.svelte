@@ -26,7 +26,7 @@
     let fromRust = await invoke("get_env", { name })
     let fromVite = import.meta.env[name]
     let fromShell = await getEnvShell(name);
-    let fromSvelte = env[name]
+    let fromSvelte = (env as any)[name]
 
     response = `from rust: "${fromRust}"\n`;
     response += `from vite: "${fromVite}"\n`;

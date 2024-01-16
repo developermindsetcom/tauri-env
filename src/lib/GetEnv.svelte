@@ -9,44 +9,86 @@
   let response = ""
 
   const getEnvShell = async (arg:string|string[]) => {
-    const cmd = await Command.create(
-        "run-printenv",
-        arg
-    ).execute();
-  
-    if(cmd.code == 0) {
-      return cmd.stdout.trim()
+    try {
+      const cmd = await Command.create(
+          "run-printenv",
+          arg
+      ).execute();
+    
+      if(cmd.code == 0) {
+        return cmd.stdout.trim()
+      }
+    }catch(err){
+      console.error('getEnvShell', err);
     }
 
     return ""
   }
 
   const getPrivateSvelteKit = async (name:string) => {
-		const response = await fetch('/api/getEnv', {
-			method: 'POST',
-			body: JSON.stringify({ name }),
-			headers: {
-				'content-type': 'application/json',
-			},
-		});
-	
-		const {variable} = await response.json();
-    return variable
+		try {
+      const response = await fetch(`/api/getEnv/?name=${name}`);
+    
+      const {variable} = await response.json();
+      return variable
+    }catch(err){
+      console.error('getPrivateSvelteKit', err);
+    }
+
+    return ""
+  }
+
+  const getFromRust = async (name:string) => {
+    try{
+      return await invoke("get_env", { name })
+    }catch(err){
+      console.error('getFromRust', err);
+    }
+
+    return ""
+  }
+
+  const getFromVite = (name:string) => {
+    try {
+      return import.meta.env[name] || ""
+    }catch(err){
+      console.error('getFromVite', err);
+    }
+
+    return ""
+  }
+
+  const getFromSvelte = (name:string) => {
+    try {
+      return (env as any)[name] || ""
+    }catch(err){
+      console.error('getFromSvelte', err);
+    }
+
+    return ""
   }
 
   async function getEnv(){
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    let fromRust = await invoke("get_env", { name })
-    let fromVite = import.meta.env[name]
+    let fromRust = await getFromRust(name);
+    let fromVite = getFromVite(name);
+    let fromSvelte = getFromSvelte(name);
     let fromShell = await getEnvShell(name);
-    let fromSvelte = (env as any)[name]
     let fromPrivateSvelte = await getPrivateSvelteKit(name);
+
+    // console.log({
+    //   fromPrivateSvelte,
+    //   fromRust,
+    //   fromShell,
+    //   fromSvelte,
+    //   fromVite
+    // })
 
     response = `from rust: "${fromRust}"\n`;
     response += `from vite: "${fromVite}"\n`;
-    response += `from shell: "${fromShell}"\n`;
     response += `from sveltekit: "${fromSvelte}"\n`;
     response += `from private sveltekit: "${fromPrivateSvelte}"\n`;
+    response += `from shell: "${fromShell}"\n`;
     response += `\n`;
   }
 </script>

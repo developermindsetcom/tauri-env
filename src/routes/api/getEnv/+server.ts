@@ -2,9 +2,18 @@ import { error, json } from '@sveltejs/kit';
 import * as privateEnv from '$env/static/private';
 import type { RequestHandler } from './$types';
 
-export const POST: RequestHandler = async ({request}) => {
-    const { name } = await request.json();
-    const variable = (privateEnv as any)[name];
+export const prerender = true;
 
-	return json({variable})
+// TODO: not secure, make sure to limit this only to variables you have to use!
+// TODO: works only in dev mode, because works only with `@sveltejs/adapter-static`
+export const GET: RequestHandler = async (params) => {
+    if(!prerender){
+        // const { name } = await params.request.json(); // for POST
+        const name = params.url.searchParams.get('name')
+        
+        const variable = name ? (privateEnv as any)[name] : '';
+        return json({variable})
+    }
+
+    return json({variable: ''})
 };

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import GetEnv from './lib/GetEnv.svelte'
+  import GetEnv from '$lib/GetEnv.svelte'
 </script>
 
 <main class="container">

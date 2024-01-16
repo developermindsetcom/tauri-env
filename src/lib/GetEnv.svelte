@@ -1,16 +1,37 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core"
+  // https://tauri.app/v1/api/js/shell/#example-scope-configuration
+  import { Command } from "@tauri-apps/plugin-shell";
+  // https://kit.svelte.dev/docs/modules#$env-dynamic-public
+  import { env } from '$env/dynamic/public';
 
   let name = "";
   let response = ""
+
+  const getEnvShell = async (arg:string|string[]) => {
+    const cmd = await Command.create(
+        "run-printenv",
+        arg
+    ).execute();
+  
+    if(cmd.code == 0) {
+      return cmd.stdout.trim()
+    }
+
+    return ""
+  }
 
   async function getEnv(){
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
     let fromRust = await invoke("get_env", { name })
     let fromVite = import.meta.env[name]
+    let fromShell = await getEnvShell(name);
+    let fromSvelte = env[name]
 
-    response += `from rust: "${fromRust}"\n`;
+    response = `from rust: "${fromRust}"\n`;
     response += `from vite: "${fromVite}"\n`;
+    response += `from shell: "${fromShell}"\n`;
+    response += `from svelte: "${fromSvelte}"\n`;
     response += `\n`;
   }
 </script>

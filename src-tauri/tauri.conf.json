@@ -37,6 +37,13 @@
   },
   "plugins": {
     "shell": {
+      "scope": [
+        {
+          "name": "run-printenv",
+          "cmd": "printenv",
+          "args": true
+        }
+      ],
       "open": true
     }
   }

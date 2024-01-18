@@ -11,7 +11,7 @@
 npm run tauri build
 ```
 
-## macOS
+### macOS
 
 ```shell
 npx tauri build --target universal-apple-darwin

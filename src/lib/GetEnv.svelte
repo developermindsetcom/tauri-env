@@ -3,7 +3,9 @@
   // https://tauri.app/v1/api/js/shell/#example-scope-configuration
   import { Command } from "@tauri-apps/plugin-shell";
   // https://kit.svelte.dev/docs/modules#$env-dynamic-public
-  import { env } from '$env/dynamic/public';
+  // import { env } from '$env/static/public';
+  // https://kit.svelte.dev/docs/modules#$env-static-public
+  import * as env from '$env/static/public';
 
   let name = "";
   let response = ""

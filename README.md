@@ -2,6 +2,7 @@
 
 ![demo](./docs/demo.png)
 
+[YouTube Tutorial](https://www.youtube.com/watch?v=eFRl38t-D1U)
 
 ## Release
 
